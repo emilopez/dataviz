@@ -26,14 +26,19 @@ tabs = st.tabs(["Principal", "Acerca de"])
 principal = tabs[0]
 acerca_de = tabs[1]
 with principal:
-    c1, c2, c3, c4 = st.columns([1.7,0.3,2.1,2.1])
+    c1, c2, c3, c4 = st.columns([1.7,0.6,0.5,2.1])
 
     uploaded_files = c1.file_uploader("Cargar archivos CSV", type=["csv"], accept_multiple_files=True)
-    desde_n_dias = c2.selectbox("Días previos", (7, 50, 100))
+    ncolumns = c2.number_input('Nro. de columnas', min_value=1, value=3, step=1)
+    option = c3.selectbox('Caracter separador',(';', ',', 'tab'))
     if uploaded_files:
         dfs = (pd.read_csv(f, sep=";", parse_dates=['datetime'], names=['datetime', 'bateria', 'cmca'], comment='#') for f in uploaded_files)
-        eqPuntano = pd.concat(dfs, ignore_index=True)
-        st.write(eqPuntano)    
+        eq = pd.concat(dfs, ignore_index=True)
+        fig = go.Figure()
+        fig.add_trace(go.Scattergl(x=eq["datetime"], y=eq["cmca"], name="Columna de agua"))
+        st.plotly_chart(fig, use_container_width=True)
+        c4.dataframe(eq)    
+
 
     
 
