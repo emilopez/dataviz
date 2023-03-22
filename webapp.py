@@ -56,6 +56,6 @@ with acerca_de:
     st.write("Programa:", "PyDataViz")
     st.write("Versión:",1.0)
     st.write("Dependencias:", "Python 3.9, Pandas, Numpy, Plotly")
-    st.write("Fecha:", "08/11/2022")
+    st.write("Fecha:", "21/03/2023")
     st.write("Autor:", "Mg. Ing. Emiliano P. López")
     st.write("Email:", "emiliano.lopez@gmail.com")
