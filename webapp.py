@@ -17,6 +17,7 @@ st.markdown(""" <style>
 footer {visibility: hidden;}
 </style> """, unsafe_allow_html=True)
 
+dev_column_names = {'v1.0': ['datetime', 'bateria', 'cmca']}
     
 
 st.header("DataViz - Visualizador de datos")
@@ -26,18 +27,25 @@ tabs = st.tabs(["Principal", "Acerca de"])
 principal = tabs[0]
 acerca_de = tabs[1]
 with principal:
-    c1, c2, c3, c4 = st.columns([1.7,0.6,0.5,2.1])
+    c1, c2, c3 = st.columns([2.5,0.6,0.5])
 
     uploaded_files = c1.file_uploader("Cargar archivos CSV", type=["csv"], accept_multiple_files=True)
-    ncolumns = c2.number_input('Nro. de columnas', min_value=1, value=3, step=1)
-    option = c3.selectbox('Caracter separador',(';', ',', 'tab'))
+    # version del dispositivo
+    dev_version = c2.selectbox('Modelo dispositivo',('v1.0', 'v0.99'))
+    column_names = dev_column_names[dev_version]
+    column_datetime = column_names[0]
+    c3.table(pd.DataFrame(column_names,columns=["Columna"]))
     if uploaded_files:
-        dfs = (pd.read_csv(f, sep=";", parse_dates=['datetime'], names=['datetime', 'bateria', 'cmca'], comment='#') for f in uploaded_files)
+        dfs = (pd.read_csv(f, sep=";", parse_dates=[column_datetime], names=column_names, comment='#') for f in uploaded_files)
         eq = pd.concat(dfs, ignore_index=True)
-        fig = go.Figure()
-        fig.add_trace(go.Scattergl(x=eq["datetime"], y=eq["cmca"], name="Columna de agua"))
-        st.plotly_chart(fig, use_container_width=True)
-        c4.dataframe(eq)    
+        column_plot = st.columns(2)
+        for i,column in enumerate(column_names[1:]):
+            fig = go.Figure()
+            fig.add_trace(go.Scattergl(x=eq[column_datetime], y=eq[column], name=column))
+            fig.update_layout(title=column.upper(),xaxis_title=column_datetime)
+            column_plot[(i+1)%2].plotly_chart(fig, use_container_width=True)
+        
+        #c4.dataframe(eq)    
 
 
     
