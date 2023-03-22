@@ -32,7 +32,7 @@ with principal:
     uploaded_files = c1.file_uploader("Cargar archivos CSV", type=["csv"], accept_multiple_files=True)
     # version del dispositivo
     dev_version = c2.selectbox('Modelo dispositivo',('v1.0', 'v0.99'))
-    if dev_version = "v1.0":
+    if dev_version == "v1.0":
         column_names = dev_column_names[dev_version]
         column_datetime = column_names[0]
         c3.table(pd.DataFrame(column_names,columns=["Columna"]))
