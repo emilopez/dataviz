@@ -32,19 +32,21 @@ with principal:
     uploaded_files = c1.file_uploader("Cargar archivos CSV", type=["csv"], accept_multiple_files=True)
     # version del dispositivo
     dev_version = c2.selectbox('Modelo dispositivo',('v1.0', 'v0.99'))
-    column_names = dev_column_names[dev_version]
-    column_datetime = column_names[0]
-    c3.table(pd.DataFrame(column_names,columns=["Columna"]))
-    if uploaded_files:
-        dfs = (pd.read_csv(f, sep=";", parse_dates=[column_datetime], names=column_names, comment='#') for f in uploaded_files)
-        eq = pd.concat(dfs, ignore_index=True)
-        column_plot = st.columns(2)
-        for i,column in enumerate(column_names[1:]):
-            fig = go.Figure()
-            fig.add_trace(go.Scattergl(x=eq[column_datetime], y=eq[column], name=column))
-            fig.update_layout(title=column.upper(),xaxis_title=column_datetime)
-            column_plot[(i+1)%2].plotly_chart(fig, use_container_width=True)
-        
+    if dev_version = "v1.0":
+        column_names = dev_column_names[dev_version]
+        column_datetime = column_names[0]
+        c3.table(pd.DataFrame(column_names,columns=["Columna"]))
+        if uploaded_files:
+            dfs = (pd.read_csv(f, sep=";", parse_dates=[column_datetime], names=column_names, comment='#') for f in uploaded_files)
+            eq = pd.concat(dfs, ignore_index=True)
+            column_plot = st.columns(2)
+            for i,column in enumerate(column_names[1:]):
+                fig = go.Figure()
+                fig.add_trace(go.Scattergl(x=eq[column_datetime], y=eq[column], name=column))
+                fig.update_layout(title=column.upper(),xaxis_title=column_datetime)
+                column_plot[(i+1)%2].plotly_chart(fig, use_container_width=True)
+    else:
+        st.write("versión no disponible")    
         #c4.dataframe(eq)    
 
 
