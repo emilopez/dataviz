@@ -35,7 +35,7 @@ with principal:
     if dev_version == "v1.0":
         column_names = dev_column_names[dev_version]
         column_datetime = column_names[0]
-        c3.table(pd.DataFrame(column_names,columns=["Columna"]))
+        c3.table(pd.DataFrame(column_names,columns=["Columnas"]))
         if uploaded_files:
             dfs = (pd.read_csv(f, sep=";", parse_dates=[column_datetime], names=column_names, comment='#') for f in uploaded_files)
             eq = pd.concat(dfs, ignore_index=True)
