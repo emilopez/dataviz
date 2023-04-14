@@ -74,10 +74,11 @@ with calibracion:
         corr_matrix = np.corrcoef(ydata, xdata)
         corr = corr_matrix[0,1]
         R2 = corr**2
-        fig.add_trace(go.Scattergl(x=x, y=y, mode="lines", name=f"Ajuste: y={c[1]}x+{c[0]}"))
+        st.latex(f"y={str(c[1])[0:7]}x + {str(c[0])[0:7]},\quad R^2={str(R2)[0:7]}")
+        fig.add_trace(go.Scattergl(x=x, y=y, mode="lines", name=f"Ajuste"))
         fig.add_trace(go.Scattergl(x=[0,900], y=[0,900], mode='lines', name="1:1", line = dict(color='gray', width=2, dash='dash')))
 
-        fig.update_layout(title=f"Calibración de 0 a 870cm. R²={R2}", xaxis_title="Columna Agua Sensor [cm]", yaxis_title="Columna Agua Manual [cm]")
+        fig.update_layout(title=f"Datos de calibración", xaxis_title="Columna Agua Sensor [cm]", yaxis_title="Columna Agua Manual [cm]")
         fig.update_layout(autosize=False, width = 800, height =800)
         fig.update_layout(font  = dict(family = "Calibri", size = 20,),)
 
