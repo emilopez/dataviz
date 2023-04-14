@@ -107,7 +107,8 @@ with calibracion:
 
         )
         st.plotly_chart(fig, use_container_width=True)
-
+    else:
+        st.write("Equipo no encontrado!")
 
 
 with acerca_de:
