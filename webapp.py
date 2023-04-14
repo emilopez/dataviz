@@ -4,6 +4,9 @@ import numpy as np
 import pandas as pd
 import datetime
 
+from numpy.polynomial import polynomial
+
+from pathlib import Path
 
 #today_icon = random.choice(["🧉", "📉", "💧","🦩","🦟","🌎", "🇦🇷","🌅","🌉"]) #https://emojipedia.org/
 st.set_page_config(
@@ -24,10 +27,11 @@ dev_column_names = {'v1.0a': ['datetime', 'bateria', 'cmca'],
 
 st.header("DataViz - Visualizador de datos")
 
-tabs = st.tabs(["Principal", "Acerca de"])
+tabs = st.tabs(["Principal", "Datos Calibración", "Acerca de"])
 
 principal = tabs[0]
-acerca_de = tabs[1]
+calibracion = tabs[1]
+acerca_de = tabs[2]
 with principal:
     c1, c2, c3 = st.columns([2.5,0.6,0.5])
 
@@ -52,7 +56,59 @@ with principal:
         #c4.dataframe(eq)    
 
 
-    
+with calibracion:
+    serial_number = st.text_input('Número serie del dispositivo (SN)', "")
+    if serial_number == "00021":
+        cwd = Path.cwd()
+        fn  = cwd / "calib_data" / "dev_sn_0021.csv"
+        data = pd.read_csv(fn, sep=";")
+        xdata = data["sensor"]
+        ydata = data["manual"]
+
+        c, stats = polynomial.polyfit(xdata,ydata,1,full=True)
+        
+        fig = go.Figure()
+        fig.add_trace(go.Scattergl(x=xdata, y=ydata, mode="markers", name="Datos"))
+        x = np.arange(0,870,0.1)
+        y = x*c[1] + c[0]
+        corr_matrix = np.corrcoef(ydata, xdata)
+        corr = corr_matrix[0,1]
+        R2 = corr**2
+        fig.add_trace(go.Scattergl(x=x, y=y, mode="lines", name=f"Ajuste: y={c[1]}x+{c[0]}"))
+        fig.add_trace(go.Scattergl(x=[0,900], y=[0,900], mode='lines', name="1:1", line = dict(color='gray', width=2, dash='dash')))
+
+        fig.update_layout(title=f"Calibración de 0 a 870cm. R²={R2}", xaxis_title="Columna Agua Sensor [cm]", yaxis_title="Columna Agua Manual [cm]")
+        fig.update_layout(autosize=False, width = 800, height =800)
+        fig.update_layout(font  = dict(family = "Calibri", size = 20,),)
+
+        fig.update_layout(
+            xaxis = dict(
+                showline = True,
+                linecolor = 'black',
+                showgrid = True, 
+                tickfont = dict(
+                        family = 'Calibri'
+                    )),
+            yaxis = dict(
+                showline = True,
+                showgrid = True,
+                linecolor = 'black', 
+                tickfont = dict(
+                    family = 'Calibri'
+                )
+            ),
+            legend=dict(
+                yanchor="top",
+                y=0.99,
+                xanchor="left",
+                x=0.01
+            ),
+            template = 'plotly_white', 
+
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+
 
 with acerca_de:
     st.write("Programa:", "PyDataViz")
