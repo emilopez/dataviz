@@ -20,8 +20,8 @@ st.markdown(""" <style>
 footer {visibility: hidden;}
 </style> """, unsafe_allow_html=True)
 
-dev_column_names = {'v1.0a': ['datetime', 'bateria', 'cmca'],
-                    'v1.0b': ['datetime', 'bateria', 'nf', 'cmca'],
+dev_column_names = {'v2.0': ['datetime', 'bateria', 'cmca'],
+                    'v4.0': ['datetime', 'bateria', 'nf', 'cmca'],
                     }
     
 
@@ -37,8 +37,8 @@ with principal:
 
     uploaded_files = c1.file_uploader("Cargar archivos CSV", type=["csv"], accept_multiple_files=True)
     # version del dispositivo
-    dev_version = c2.selectbox('Modelo dispositivo',('v1.0a', 'v1.0b'))
-    if dev_version == "v1.0a" or dev_version == "v1.0b":
+    dev_version = c2.selectbox('Modelo dispositivo',('v2.0', 'v4.0'))
+    if dev_version in dev_column_names:
         column_names = dev_column_names[dev_version]
         column_datetime = column_names[0]
         c3.table(pd.DataFrame(column_names, columns=["Columnas"]))
@@ -58,7 +58,7 @@ with principal:
 
 with calibracion:
     serial_number = st.text_input('Número serie del dispositivo (SN)', "")
-    if serial_number == "00021":
+    if serial_number == "0021":
         cwd = Path.cwd()
         fn  = cwd / "calib_data" / "dev_sn_0021.csv"
         data = pd.read_csv(fn, sep=";")
