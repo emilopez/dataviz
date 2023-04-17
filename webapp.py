@@ -45,6 +45,7 @@ with principal:
         if uploaded_files:
             dfs = (pd.read_csv(f, sep=";", parse_dates=[column_datetime], names=column_names, comment='#') for f in uploaded_files)
             eq = pd.concat(dfs, ignore_index=True)
+            eq.sort_values(by=column_datetime, inplace = True) 
             column_plot = st.columns(2)
             for i,column in enumerate(column_names[1:]):
                 fig = go.Figure()
