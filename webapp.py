@@ -48,9 +48,11 @@ with principal:
             eq.sort_values(by=column_datetime, inplace = True) 
             column_plot = st.columns(2)
             for i,column in enumerate(column_names[1:]):
-                fig = go.Figure()
+                fig = go.Figure()    
                 fig.add_trace(go.Scattergl(x=eq[column_datetime], y=eq[column], name=column, mode="lines+markers"))
-                fig.update_layout(title=column.upper(),xaxis_title=column_datetime)
+                fig.update_layout(title=column.upper(), xaxis_title=column_datetime)
+                if column == "nf":
+                    fig.update_yaxes(autorange="reversed")
                 column_plot[(i+1)%2].plotly_chart(fig, use_container_width=True)
     else:
         st.write("versión no disponible")    
