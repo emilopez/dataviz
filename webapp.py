@@ -83,10 +83,10 @@ with calibracion:
         fig = go.Figure()
         fig.add_trace(go.Scattergl(x=xdata, y=ydata, mode="markers", name="Datos"))
         fig.add_trace(go.Scattergl(x=x, y=y, mode="lines", name=f"Ajuste"))
-        fig.add_trace(go.Scattergl(x=[0,900], y=[0,900], mode='lines', name="1:1", line = dict(color='gray', width=2, dash='dash')))
+        fig.add_trace(go.Scattergl(x=[0,780], y=[0,780], mode='lines', name="1:1", line = dict(color='gray', width=2, dash='dash')))
 
         fig.update_layout(title=f"Datos de calibración", xaxis_title="Columna Agua Sensor [cm]", yaxis_title="Columna Agua Manual [cm]")
-        fig.update_layout(autosize=False, width = 500, height = 500)
+        fig.update_layout(autosize=False, width = 700, height = 700)
         fig.update_layout(font  = dict(family = "Calibri", size = 20,),)
 
         fig.update_layout(
